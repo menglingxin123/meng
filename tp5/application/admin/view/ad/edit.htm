@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html><head>
+	    <meta charset="utf-8">
+    <title>ThinkPHP5.0</title>
+
+    <meta name="description" content="Dashboard">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!--Basic Styles-->
+    <link href="__ADMIN__/style/bootstrap.css" rel="stylesheet">
+    <link href="__ADMIN__/style/font-awesome.css" rel="stylesheet">
+    <link href="__ADMIN__/style/weather-icons.css" rel="stylesheet">
+        <script src="__ADMIN__/style/jquery_002.js"></script>
+    <script src="__ADMIN__/layer/layer.js"></script>
+
+    <!--Beyond styles-->
+    <link id="beyond-link" href="__ADMIN__/style/beyond.css" rel="stylesheet" type="text/css">
+    <link href="__ADMIN__/style/demo.css" rel="stylesheet">
+    <link href="__ADMIN__/style/typicons.css" rel="stylesheet">
+    <link href="__ADMIN__/style/animate.css" rel="stylesheet">
+    
+</head>
+<body>
+	<!-- 头部 -->
+	{include file="common/head"}
+
+	<!-- /头部 -->
+	
+	<div class="main-container container-fluid">
+		<div class="page-container">
+			            <!-- Page Sidebar -->
+            {include file="common/left"}
+            <!-- /Page Sidebar -->
+            <!-- Page Content -->
+<div class="page-content">
+                <!-- Page Breadcrumb -->
+                <div class="page-breadcrumbs">
+                    <ul class="breadcrumb">
+                                        <li>
+                        <a href="#">系统</a>
+                    </li>
+                                        <li>
+                        <a href="/tp5dm/public/admin/ad/lst.html">广告管理</a>
+                    </li>
+                                        <li class="active">修改广告</li>
+                                        </ul>
+                </div>
+                <!-- /Page Breadcrumb -->
+
+                <!-- Page Body -->
+                <div class="page-body">
+                    
+                <div class="row">
+                    <div class="col-lg-12 col-sm-12 col-xs-12">
+                        <div class="widget">
+                            <div class="widget-header bordered-bottom bordered-blue">
+                                <span class="widget-caption">修改广告</span>
+                            </div>
+                            <div class="widget-body">
+                                <div id="horizontal-form">
+                                    <form class="form-horizontal" role="form" action="" enctype="multipart/form-data" method="post">
+                                        <input type="hidden" name="id" value="{$ad.id}">
+                                        <input type="hidden" name="oldimgsrc" value="{$ad.img_src}">
+                                        <input type="hidden" name="type" value="{$ad.type}">
+                                        <div class="form-group">
+                                            <label for="group_id" class="col-sm-2 control-label no-padding-right">所属广告位</label>
+                                            <div class="col-sm-6">
+                                                <select name="adpos_id" style="width: 100%;">
+                                                    <option value="">选择广告位</option>
+                                                    {volist name="adposRes" id="res"}
+                                                         <option selected="selected" value="{$res.id}">{$res.name}</option>
+                                                     {/volist}                                                    
+                                                </select>
+                                            </div>
+                                        </div>  
+
+                                        <div class="form-group">
+                                            <label for="username" class="col-sm-2 control-label no-padding-right">广告名</label>
+                                            <div class="col-sm-6">
+                                                <input class="form-control" placeholder="" name="ad_name" value="{$ad.ad_name}" type="text">
+                                            </div>
+                                            <p class="help-block col-sm-4 red">* 必填</p>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="username" class="col-sm-2 control-label no-padding-right">是否启用</label>
+                                            <div class="col-sm-6">
+
+                                                 <!-- 单选按钮 -->
+                                                <div class="radio" style="float:left; padding-left:10px;">
+                                                    <label>
+                                                        <input {if condition="$ad['on'] eq 1"}checked="checked"{/if} name="on" value="1" class="colored-blue" type="radio">
+                                                        <span class="text">是</span>
+                                                    </label>
+                                                </div>
+                                                 <!-- 单选按钮 -->
+                                                <div class="radio" style="float:left; padding-left:10px;">
+                                                    <label>
+                                                        <input {if condition="$ad['on'] eq 0"}checked="checked"{/if} name="on" value="0" class="colored-blue" type="radio">
+                                                        <span class="text">否</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <p class="help-block col-sm-4 red">* 必填</p>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="username" class="col-sm-2 control-label no-padding-right">广告类型</label>
+                                            <div class="col-sm-6">
+                                                <div class="radio" style="float:left; padding-left:10px;">
+                                                    <label>
+                                                        {if condition="$ad['type'] eq 1"}
+                                                          <span class="label label-orange"> 图片 </span>
+                                                          {else/}
+                                                          <span class="label label-green"> 轮换 </span>
+
+                                                          {/if}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <p class="help-block col-sm-4 red">* 必填</p>
+                                        </div>
+
+                                        {if condition="$ad['type'] eq 1"}
+                                        <div class="img">
+                                            <div class="form-group">
+                                                <label for="username" class="col-sm-2 control-label no-padding-right">图片</label>
+                                                <div class="col-sm-6">
+                                                    <input class="help-block" name="img_src" type="file">
+                                                <img width="100" src="__INDEX__/ad/{$ad.img_src}">
+                                                </div>
+                                                <p class="help-block col-sm-4 red">* 必填</p>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="username" class="col-sm-2 control-label no-padding-right">链接</label>
+                                                <div class="col-sm-6">
+                                                    <input class="form-control" placeholder="" name="link" value="{$ad.link}" type="text">
+                                                </div>
+                                                <p class="help-block col-sm-4 red">* 必填</p>
+                                            </div>
+                                        </div>
+                                        {/if}
+                                      {if condition="$ad['type'] eq 2"}
+                                          {if condition="$adflashRes"}
+                                             <div class="lh" >
+                                            <div class="form-group">
+                                                <label for="username" class="col-sm-2 control-label no-padding-right"><a href="javascript:;" onclick="dt(this);">[+]</a></label>
+                                                <div class="col-sm-6 help-block">
+                                                    <span>图片：</span>
+                                                    <input style="display:inline;" placeholder="" name="fimg_src[]"  type="file">
+                                                    <span>链接：</span>
+                                                    <input style="display:inline; width:300px;" placeholder="" name="flink[]" value="" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                          {volist name="adflashRes" id="res"}
+                                         <div class="lh" >
+                                            <div class="form-group">
+                                                <label for="username" class="col-sm-2 control-label no-padding-right"><a id="{$res.id}" href="javascript:;" onclick="dt(this);">[-]</a></label>
+                                                <div class="col-sm-6 help-block">
+                                                    <span>图片：</span>
+<!--                                                     <input style="display:inline;" placeholder="" name="oldfimg_src[]"  type="file">
+ -->                                                    <img width="100" src="__INDEX__/ad/{$res.fimg_src}">
+                                                    <span>链接：</span>
+                                                    <input style="display:inline; width:300px;" placeholder="" name="oldflink[{$res.id}]" value="{$res.flink}" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {/volist}
+                                        {/if}
+                           {/if}
+                              
+                                        <div class="form-group">
+                                            <div class="col-sm-offset-2 col-sm-10">
+                                                <button type="submit" class="btn btn-default">保存信息</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                </div>
+                <!-- /Page Body -->
+            </div>
+            <!-- /Page Content -->
+		</div>	
+	</div>
+
+	    <!--Basic Scripts-->
+    <script src="__ADMIN__/style/jquery_002.js"></script>
+    <script src="__ADMIN__/style/bootstrap.js"></script>
+    <script src="__ADMIN__/style/jquery.js"></script>
+    <!--Beyond Scripts-->
+    <script src="__ADMIN__/style/beyond.js"></script>
+    <script type="text/javascript">
+        $("#img").click(function(){
+            $(".img").show();
+            $(".lh").hide();
+        });
+        $("#lh").click(function(){
+            $(".img").hide();
+            $(".lh").show();
+        });
+        //删除广告记录
+        function ajaxdel(id,div){
+            layer.confirm('确定要删除该广告吗？', {icon: 3, title:'提示'}, function(index){
+            //do something
+            // var table_name=$(o).attr("table_name");
+            $.ajax({
+                type:"post",
+                dataType:"json",
+                data:{id:id},
+                url:"{:url('Ad/ajaxdel')}",
+                success:function(data){
+                    if(data==1){
+                        layer.msg('删除广告成功！', {icon: 1});
+                        div.remove();
+                        // window.location.href="{:url('ModelFields/lst')}";
+                    }else{
+                        layer.msg('删除广告失败！', {icon: 2});
+                    }
+                }
+            });
+              layer.close(index);
+            });
+        }
+
+                function dt(o){
+            var div=$(o).parent().parent();
+            var id=$(o).attr('id');
+            if($(o).html()==='[+]'){
+                var newdiv=div.clone();
+                newdiv.find("a").html('[-]');
+                div.after(newdiv);
+            }else{
+             if(id){
+               ajaxdel(id,div);
+              }else{
+                div.remove();
+              }
+                // 
+            }
+        }
+    </script>
+
+
+</body></html>

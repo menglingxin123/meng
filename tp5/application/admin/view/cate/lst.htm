@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html><head>
+	    <meta charset="utf-8">
+    <title>ThinkPHP5.0</title>
+
+    <meta name="description" content="Dashboard">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script src="__ADMIN__/style/jquery_002.js"></script>
+
+    <!--Basic Styles-->
+    <link href="__ADMIN__/style/bootstrap.css" rel="stylesheet">
+    <link href="__ADMIN__/style/font-awesome.css" rel="stylesheet">
+    <link href="__ADMIN__/style/weather-icons.css" rel="stylesheet">
+
+    <!--Beyond styles-->
+    <link id="beyond-link" href="__ADMIN__/style/beyond.css" rel="stylesheet" type="text/css">
+    <link href="__ADMIN__/style/demo.css" rel="stylesheet">
+    <link href="__ADMIN__/style/typicons.css" rel="stylesheet">
+    <link href="__ADMIN__/style/animate.css" rel="stylesheet">
+     <script src="__ADMIN__/uploadify/jquery.uploadify.min.js"></script>
+     <script src="__ADMIN__/ueditor/ueditor.config.js"></script>
+     <script src="__ADMIN__/ueditor/ueditor.all.min.js"></script>
+     <script src="__ADMIN__/ueditor/lang/zh-cn/zh-cn.js"></script>
+     <script src="__ADMIN__/layer/layer.js"></script>
+</head>
+<body>
+	<!-- 头部 -->
+    {include file="common/head"}
+
+	<!-- /头部 -->
+	
+	<div class="main-container container-fluid">
+		<div class="page-container">
+			           <!-- Page Sidebar -->
+                {include file="common/left"}
+
+                <!-- /Sidebar Menu -->
+            <!-- /Page Sidebar -->
+            <!-- Page Content -->
+            <div class="page-content">
+                <!-- Page Breadcrumb -->
+                <div class="page-breadcrumbs">
+                    <ul class="breadcrumb">
+                                        <li>
+                        <a href="{:url('Index/index')}">系统</a>
+                    </li>
+                                        <li>
+                        <a href="{:url('Cate/lst')}">栏目管理</a>
+                    </li>
+                                        <li class="active">添加栏目</li>
+                                        </ul>
+                </div>
+                <!-- /Page Breadcrumb -->
+
+                <!-- Page Body -->
+                <div class="page-body">
+                    
+<button type="button" tooltip="添加用户" class="btn btn-sm btn-azure btn-addon" onClick="javascript:window.location.href = '{:url('Cate/add')}'"> <i class="fa fa-plus"></i> Add
+</button>
+<div class="row">
+    <div class="col-lg-12 col-sm-12 col-xs-12">
+        <div class="widget">
+            <div class="widget-body">
+                <div class="flip-scroll">
+                  <form method="post" action="{:url('Cate/del_sort')}" >
+
+                    <table class="table table-bordered table-hover">
+                        <thead class="">
+                            <tr pid="0">
+                               <th class="text-center">伸缩</th>
+                                <th class="text-center">
+                                    <label>
+                                        <input id="checkall" class="colored-blue" type="checkbox">
+                                        <span class="text"></span>
+                                    </label>
+                                </th>
+                                <th class="text-center">ID</th>
+                                <th class="text-center">栏目</th>
+                                <th class="text-center">状态</th>
+                                <th class="text-center">属性</th>
+                                <th class="text-center">所属模型</th>
+                                <th class="text-center">排序</th>
+                                <th class="text-center">操作</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                         {volist name="cateRes" id="cate"}
+
+                             <tr id="{$cate.id}" pid="{$cate.pid}">
+                               <td align="center">
+                                <span style="border:1px solid #ccc;padding:0px 3px; cursor:pointer" class="open">+</span>
+                                </td>
+                                <td align="center">
+                                     <label>
+                                        <input  name="itm[]"  class="colored-blue" value="{$cate.id}" type="checkbox">
+
+                                        <span class="text"></span>
+                                    </label>
+                                </td>
+                                <td >{$cate.id}</td>
+                                <td ><a href="{:url('Content/lst',array('cateid'=>$cate['id'],'modelid'=>$cate['model_id']))}"><?php echo str_repeat('-', $cate['level']*8);?>{$cate.cate_name}</a><a style="float:right;" class="btn btn-sm btn-azure btn-addon" href="{:url('Cate/add',array('cateid'=>$cate['id']))}"><i class="fa fa-plus"></i>添加子栏目</a></td>
+                                <td >{if condition="$cate['status'] eq 1"}<a  cateid="{$cate.id}" onclick="changestatus(this)" class="btn btn-primary btn-sm shiny">显示
+                                    </a>{else/}<a  cateid="{$cate.id}"  onclick="changestatus(this)"  class="btn btn-danger btn-sm shiny">隐藏
+                                    </a>{/if}</td>
+                                <td >{if condition="$cate['cate_attr'] eq 1"}列表栏目{elseif $cate['cate_attr'] eq 2 /}频道封面{elseif  $cate['cate_attr'] eq 3}外链{/if}</td>
+                                <td >{$cate.model_name}</td>
+                                <td><input name="sort[{$cate.id}]" style="width:50px; text-align:center;" type="text" value="{$cate.sort}"></td>
+                                <td align="center">
+                                    <a href="{:url('Cate/edit',array('cateid'=>$cate['id']))}" class="btn btn-primary btn-sm shiny">
+                                        <i class="fa fa-edit"></i> 编辑
+                                    </a>
+                                    <a href="#" onClick="warning('确实要删除吗', '{:url('Cate/del',array('cateid'=>$cate['id']))}')" class="btn btn-danger btn-sm shiny">
+                                        <i class="fa fa-trash-o"></i> 删除
+                                    </a>
+                                </td>
+                            </tr>
+                             <script type="text/javascript">
+                                var cateid={$cate.id};
+
+                                $.ajax({
+                                   type:"post",
+                                   dataType:"text",
+                                   url:"{:url('Cate/shengsuo')}",
+                                   data:{cateid:cateid},
+                                   success:function(data){
+                                    if(data.cateRes.length==0){
+                                       $("tr[id="+data.cateid+"]").find('span:first').text('-');
+                                       $("tr[id="+data.cateid+"]").find('span:first').attr('sstype',2);
+                                       
+                                    }else{
+                                       $("tr[id="+data.cateid+"]").find('span:first').text('+');
+                                        $("tr[id="+data.cateid+"]").find('span:first').attr('sstype',1); 
+                                    }
+
+                       
+                                   }
+
+                                });
+                             </script>
+                         {/volist}
+                            <tr pid="0">
+                                <td colspan="8"></td>
+                                <td align="center">
+                                    <button class="btn btn-default" type="submit">保存信息</button>
+                                </td>
+                            </tr>
+                       </tbody>
+                    </table>
+                  </form>
+
+                </div>
+                <div>
+                	                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+                </div>
+                <!-- /Page Body -->
+            </div>
+            <!-- /Page Content -->
+		</div>	
+            </div>
+
+	    <!--Basic Scripts-->
+
+    
+  <script type="text/javascript">
+       function changestatus(o){
+        var cateid=$(o).attr('cateid');
+        $.ajax({
+           type:"post",
+           dataType:"text",
+           url:"{:url('Cate/changestatus')}",
+           data:{cateid:cateid},
+           success:function(data){
+
+
+             if(data==1){
+                    $(o).attr("class","btn btn-danger btn-sm shiny");
+                    $(o).text('隐藏');
+                }else{
+                    $(o).attr("class","btn btn-primary btn-sm shiny");
+                    $(o).text('显示');
+                }
+           }
+
+        });
+       }
+
+    //全选处理
+    $("#checkall").click(function(){
+        if($("#checkall").attr("checked")){
+            $(".colored-blue").removeAttr("checked");
+        }else{
+            $(".colored-blue").attr("checked","checked");
+        }
+    });
+    //伸缩处理
+     $("tr[pid!=0]").hide();
+    $('.open').click(function(){
+        var id=$(this).parent().parent().attr('id');
+           id=parseInt(id);
+        var sstype=$(this).attr('sstype');
+            sstype=parseInt(sstype);
+        if($(this).text()=='+'&& sstype==1){
+            $(this).text('-');
+            $("tr[pid="+id+"]").show();
+        }else if($(this).text()=='-'&& sstype==1){
+            $(this).text('+');
+            $.ajax({
+               type:"post",
+               dataType:"text",
+               url:"{:url('Cate/hidelm')}",
+               data:{cateid:id},
+               success:function(data){
+                $(data).each(function(k,v){
+                    $("tr[id="+v+"]").hide();
+                    $.ajax({
+                       type:"post",
+                       dataType:"text",
+                       url:"{:url('Cate/shengsuo')}",
+                       data:{cateid:v},
+                       success:function(data){
+                        $(data).each(function(k,v){
+                            if(data.cateRes.length==0){
+                               $("tr[id="+data.cateid+"]").find('span:first').text('-');
+                               $("tr[id="+data.cateid+"]").find('span:first').attr('sstype',2);
+                               
+                            }else{
+                               $("tr[id="+data.cateid+"]").find('span:first').text('+');
+                                $("tr[id="+data.cateid+"]").find('span:first').attr('sstype',1); 
+                            }
+                        }) 
+
+
+                       }
+
+                    })
+                })
+
+
+               }
+
+            });
+            
+            // $("tr[pid="+id+"]").find('span:first').text('+');
+        }
+    });
+
+  </script>
+
+</body></html>

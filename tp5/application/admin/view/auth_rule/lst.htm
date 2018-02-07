@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html><head>
+	    <meta charset="utf-8">
+    <title>ThinkPHP5.0</title>
+
+    <meta name="description" content="Dashboard">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!--Basic Styles-->
+    <link href="__ADMIN__/style/bootstrap.css" rel="stylesheet">
+    <link href="__ADMIN__/style/font-awesome.css" rel="stylesheet">
+    <link href="__ADMIN__/style/weather-icons.css" rel="stylesheet">
+
+    <!--Beyond styles-->
+    <link id="beyond-link" href="__ADMIN__/style/beyond.css" rel="stylesheet" type="text/css">
+    <link href="__ADMIN__/style/demo.css" rel="stylesheet">
+    <link href="__ADMIN__/style/typicons.css" rel="stylesheet">
+    <link href="__ADMIN__/style/animate.css" rel="stylesheet">
+    <style>
+    .open {
+    border: 1px solid #ccc;
+    padding: 0 3px 0 3px;
+    cursor: pointer;
+}
+ 
+    </style>
+    
+</head>
+<body>
+	<!-- 头部 -->
+	{include file="common/head"}
+
+	<!-- /头部 -->
+	
+	<div class="main-container container-fluid">
+		<div class="page-container">
+			<!-- Page Sidebar -->
+                {include file="common/left"}
+            <!-- /Page Sidebar -->
+            <!-- Page Content -->
+<div class="page-content">
+                <!-- Page Breadcrumb -->
+                <div class="page-breadcrumbs">
+                    <ul class="breadcrumb">
+                                        <li>
+                        <a href="#">系统</a>
+                    </li>
+                                        <li class="active">广告管理</li>
+                                        </ul>
+                </div>
+                <!-- /Page Breadcrumb -->
+
+                <!-- Page Body -->
+                <div class="page-body">
+                    
+<button type="button" tooltip="添加广告" class="btn btn-sm btn-azure btn-addon" onclick="javascript:window.location.href = '{:url('add')}'"> <i class="fa fa-plus"></i> Add
+</button>
+<div class="row">
+    <div class="col-lg-12 col-sm-12 col-xs-12">
+        <div class="widget">
+            <div class="widget-body">
+                <div class="flip-scroll">
+                    <table class="table table-bordered table-hover">
+                        <thead class="">
+                            <tr> 
+                                <th class="text-center">伸缩</th>
+                                <th class="text-center">ID</th>
+                                <th class="text-center">规则名称</th>
+                                <th class="text-center">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                             {volist name="authRes" id="auth"}
+                                 <tr id="{$auth.id}" pid="{$auth.pid}" {if condition="$auth['pid'] neq 0"} style="display:none;" {/if} >
+                                    <td align="center"><span class="open">+</span></td>
+                                    <td align="center">{$auth.id}</td>
+                                    <td align="center"><?php echo str_repeat('-',$auth['level']*6)?>{$auth.title}</td>
+                                    <td align="center">
+                                        <a href="{:url('AuthRule/edit',array('id'=>$auth['id']))}" class="btn btn-primary btn-sm shiny">
+                                            <i class="fa fa-edit"></i> 编辑
+                                        </a>
+                                        <a href="#" onclick="warning('确实要删除吗', '{:url('AuthRule/del',array('id'=>$auth['id']))}')" class="btn btn-danger btn-sm shiny">
+                                            <i class="fa fa-trash-o"></i> 删除
+                                        </a>
+                                    </td>
+                                </tr>
+                              {/volist}
+                        </tbody>
+                    </table>
+
+                </div>
+
+                <div style="padding-top:10px; text-align:right; ">
+                                    </div>
+
+                <div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+                </div>
+                <!-- /Page Body -->
+            </div>
+            <!-- /Page Content -->
+		</div>	
+	</div>
+
+	    <!--Basic Scripts-->
+    <script src="__ADMIN__/style/jquery_002.js"></script>
+    <script src="__ADMIN__/style/bootstrap.js"></script>
+    <script src="__ADMIN__/style/jquery.js"></script>
+    <!--Beyond Scripts-->
+    <script src="__ADMIN__/style/beyond.js"></script>
+    <script>
+     $('.open').click(function(){
+        var id=$(this).parents('tr').attr('id');
+        if($(this).html()=='+'){
+            $(this).html('-');
+            $("tr[pid="+id+"]").show();
+    }else if($(this).html()=='-'){
+            $(this).html('+');
+            $.ajax({
+                type:'post',
+                dataType:'json',
+                data:{id:id},
+                url:"{:url('AuthRule/shengsuo')}",
+                success:function(data){
+                 $.each(data,function(k,v){
+                  $("tr[id="+v+"]").hide();
+
+                 })
+                }
+            });
+    }
+     });
+
+    </script>
+    
+
+
+</body></html>

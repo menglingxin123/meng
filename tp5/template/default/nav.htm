@@ -1,0 +1,27 @@
+<ul>
+<li><a href="/"><span>网站首页</span></a></li>
+{volist name="cateRes" id="cate"}
+<li><a href="
+{if condition="$cate['children']"}
+javascript:;
+{else/}
+{if condition="$cate['cate_attr'] eq 1"}{:url('cate/index',array('cid'=>$Cate['id']))}{/if}
+          {if condition="$cate['cate_attr'] eq 2"}{:url('Page/index',array('cid'=>$cate['id']))}{/if}
+          {if condition="$cate['cate_attr'] eq 3"}{$cate.link}{/if}
+{/if}
+
+
+"><span>{$cate.cate_name}</span>{if condition="$cate['children']"}<i class="touch-arrow-down"></i>{/if}</a>
+{if condition="$cate['children']"}
+<ul>
+{volist name="$cate['children']" id="sonCate"}
+<li><a href="
+          {if condition="$sonCate['cate_attr'] eq 1"}{:url('Cate/index',array('cid'=>$sonCate['id']))}{/if}
+          {if condition="$sonCate['cate_attr'] eq 2"}{:url('Page/index',array('cid'=>$sonCate['id']))}{/if}
+          {if condition="$sonCate['cate_attr'] eq 3"}{$sonCate.link}{/if}
+        "><span>{$sonCate.cate_name}</span></a></li>
+{/volist}
+</ul>
+{/if}
+{/volist}
+</ul>

@@ -1,0 +1,10 @@
+<div class="breadcrumbs float-right" skinobjectzone="HtmlBreadCrumb_3803"><span>当前位置：</span><a href='{:url('index/index')}'>主页</a> >
+  {volist name="position" id="pos"}
+  <a href="
+    {if condition="$pos['cate_attr'] eq 1"}{:url('Cate/index',array('cid'=>$pos['id']))}{/if}
+    {if condition="$pos['cate_attr'] eq 2"}{:url('Page/index',array('cid'=>$pos['id']))}{/if}
+    {if condition="$pos['cate_attr'] eq 3"}{$pos.link}{/if}
+    ">{$pos.cate_name}{if condition="$i neq count($position)"}>{/if}</a>
+  {/volist}
+
+</div>
